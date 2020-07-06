@@ -6,8 +6,8 @@ from processors.is_available import buy_button
 
 def setup(url):
     session = start_session()
+    # TODO: Login to account
     # TODO: Check limits
-
     add_to_cart(session, url)
     choose_time(session)
 

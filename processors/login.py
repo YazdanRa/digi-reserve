@@ -1,3 +1,2 @@
-def login():
-    # TODO: Login
-    return True
+def login(session):
+    return
