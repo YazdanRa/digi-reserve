@@ -23,8 +23,8 @@ class User(BaseModel):
     language_code = CharField(max_length=20, null=True)
     is_bot = BooleanField(default=False)
 
-    digikala_email = CharField(null=True)
-    digikala_password = CharField(null=True)
+    digi_email = CharField(null=True)
+    digi_password = CharField(null=True)
 
     def __str__(self):
         return "{} {} (@{})".format(self.first_name, self.last_name, self.username)
