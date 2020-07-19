@@ -40,6 +40,7 @@ class Message(BaseModel):
 
 class CheckList(BaseModel):
     user = ForeignKeyField(User, related_name='check_list', lazy_load=False)
+    title = CharField(default='Untitled')
     url = CharField()
     maximum_price = IntegerField(default=0)
     check_until = DateTimeField(null=True)

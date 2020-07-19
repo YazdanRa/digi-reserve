@@ -2,6 +2,14 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, MessageHandler, Filters
 
 
+keyboard = ReplyKeyboardMarkup([
+    ['ADD', 'REMOVE'],
+    ['STATUS'],
+    ['SETTINGS'],
+    ['CONTACT US', 'SUPPORT US']
+])
+
+
 def say_hello(update: Update, context: CallbackContext):
     context.user_data.clear()
 
@@ -12,6 +20,7 @@ def say_hello(update: Update, context: CallbackContext):
                              ('Hello {}!\n'.format(name) +
                               'Welcome to Digi-Reserve! you can use commands to navigate bot\n' +
                               'enjoy it :)\n'),
+                             reply_markup=keyboard,
                              parse_mode='Markdown')
 
 
