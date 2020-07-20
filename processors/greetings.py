@@ -4,8 +4,7 @@ from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, M
 
 keyboard = ReplyKeyboardMarkup([
     ['ADD', 'REMOVE'],
-    ['STATUS'],
-    ['SETTINGS'],
+    ['UPDATE DIGIKALA ACCOUNT'],
     ['CONTACT US', 'SUPPORT US']
 ])
 

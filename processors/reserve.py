@@ -137,6 +137,8 @@ def check(session):
     for item in s:
         msg += item.get_text()
     if text in r.text:
+        print('Successfully reserved')
         return True, msg
     else:
+        print('Error!')
         return False, ''

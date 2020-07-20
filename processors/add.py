@@ -7,6 +7,7 @@ from telegram.ext import CommandHandler, CallbackContext, ConversationHandler, M
 from config import DEVELOPER_CHAT_ID
 from models import User, CheckList
 from .check import ok
+from .greetings import keyboard
 
 GET_TITLE, GET_URL, GET_PRICE_LIMIT, GET_TIME_LIMIT = range(4)
 
@@ -19,9 +20,13 @@ def start_add(update: Update, context: CallbackContext):
 
 
 def get_title(update: Update, context: CallbackContext):
-    # TODO: check duplicate item for this specific user!
     chat_id = update.message.from_user.id
-    context.user_data['title'] = update.message.text
+    title = update.message.text
+    user = User.select().where(User.chat_id == chat_id)[0]
+    if len(CheckList.select().where((CheckList.user == user) & (CheckList.title == title))):
+        context.bot.send_message(chat_id, 'You already added this title to your list!\nplease enter another title:')
+        return
+    context.user_data['title'] = title
     context.bot.send_message(chat_id, 'Enter *link* of your target:', parse_mode='Markdown')
     return GET_URL
 
@@ -62,7 +67,7 @@ def get_price_limit(update: Update, context: CallbackContext):
             check_until=context.user_data['time_limit'],
             maximum_price=update.message.text
         )
-        context.bot.send_message(chat_id, 'Mission completed =D', parse_mode='Markdown')
+        context.bot.send_message(chat_id, 'Mission completed =D', reply_markup=keyboard, parse_mode='Markdown')
     except ValueError as err:
         context.bot.send_message(DEVELOPER_CHAT_ID,
                                  ('ERROR from user *{user}* :\n' +
@@ -98,7 +103,7 @@ HANDLER = ConversationHandler(
 
         GET_TITLE: [MessageHandler(Filters.text, get_title)],
 
-        GET_URL: [MessageHandler(Filters.regex(r'^(https?://(www.)?digikala.com/product\dkp-\d+/)(.*)?$'), get_url)],
+        GET_URL: [MessageHandler(Filters.regex(r'^(https?://(www.)?digikala.com/product/dkp-\d+/)(.*)?$'), get_url)],
 
         GET_TIME_LIMIT: [MessageHandler(Filters.regex(r'^[0-9]+$'), get_time_limit)],
 

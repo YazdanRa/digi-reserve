@@ -23,8 +23,10 @@ def start_remove(update: Update, context: CallbackContext):
 def get_title(update: Update, context: CallbackContext):
     chat_id = update.message.from_user.id
     title = update.message.text
-    # TODO: if not exists ask again!
     user = User.select().where(User.chat_id == chat_id)[0]
+    if not len(CheckList.select().where((CheckList.user == user) & (CheckList.title == title))):
+        context.bot.send_message(chat_id, 'This item  dose not exists!\nPlease enter another one:')
+        return
     CheckList.delete().where((CheckList.user == user) & (CheckList.title == title)).execute()
     context.bot.send_message(chat_id, 'Successfully Removed!', reply_markup=keyboard)
     context.user_data.clear()
