@@ -18,7 +18,7 @@ def start_set(update: Update, context: CallbackContext):
 def get_user(update: Update, context: CallbackContext):
     chat_id = update.message.from_user.id
     context.user_data['username'] = update.message.text
-    context.bot.delete_message(chat_id, update.message.id)
+    context.bot.delete_message(chat_id, update.message.message_id)
     context.bot.send_message(chat_id, 'Send your Digikala Password\nfor sure your password will save on database!')
     return GET_PASS
 
@@ -28,7 +28,7 @@ def get_pass(update: Update, context: CallbackContext):
     username = context.user_data['username']
     password = update.message.text
     User.update(digikala_username=username, digikala_password=password).where(User.chat_id == chat_id).execute()
-    context.bot.delete_message(chat_id, update.message.id)
+    context.bot.delete_message(chat_id, update.message.message_id)
     context.bot.send_message(chat_id, 'Your data successfully updated! =D',  reply_markup=keyboard)
     context.user_data.clear()
     return ConversationHandler.END
