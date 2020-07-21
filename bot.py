@@ -1,8 +1,9 @@
 import logging
 import os
 
-from telegram.ext import CallbackContext, Updater
+from telegram.ext import CallbackContext, Updater, DispatcherHandlerStop, MessageHandler, Filters
 
+from config import ADMINS_CHAT_ID
 from models import *
 from processors import greetings, add, remove, set_digikala, contact_us, support_us
 from processors.check import is_available, price
@@ -35,6 +36,17 @@ database.create_tables([
     Message,
     CheckList,
 ])
+
+
+def limit(update, context):
+    user_id = update.message.from_user.id
+
+    if user_id not in ADMINS_CHAT_ID:
+        context.bot.send_message(user_id, 'You are not a member! :)\n@Yazdan_ra')
+        raise DispatcherHandlerStop
+
+
+UPDATE_PROCESS_HANDLER = MessageHandler(Filters.all, limit)
 
 
 def check_list(context: CallbackContext):
@@ -75,6 +87,7 @@ def main():
 
     # DATA
     bot.add_handler(DATA, group=0)
+    bot.add_handler(UPDATE_PROCESS_HANDLER, group=0)
 
     # GENERAL
     bot.add_handler(greetings.HANDLER, group=1)
