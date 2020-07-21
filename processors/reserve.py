@@ -6,7 +6,8 @@ import requests
 
 def setup(url, username, password):
     session = start_session()
-    login(session, username, password)
+    if not login(session, username, password):
+        return False
     add_to_cart(session, url, 1)
     checkout(session)
     res, msg = check(session)
