@@ -81,7 +81,7 @@ def main():
     bot = updater.dispatcher
 
     job = updater.job_queue
-    job_minute = job.run_repeating(check_list, interval=60*5, first=0)
+    job_minute = job.run_repeating(check_list, interval=60, first=0)
 
     ### BOT HANDLERS
 
