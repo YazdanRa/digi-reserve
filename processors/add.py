@@ -34,7 +34,7 @@ def get_title(update: Update, context: CallbackContext):
 def get_url(update: Update, context: CallbackContext):
     chat_id = update.message.from_user.id
     url = update.message.text
-    url = re.search('(https?://(www.)?digikala.com/product/dkp-\d+/)(.*)?', url).group(1)
+    url = re.search('(https?://(www.)?digikala.com/product/dkp-\d+/?)(.*)?', url).group(1)
     try:
         if ok(url):
             context.user_data['url'] = url
@@ -103,7 +103,7 @@ HANDLER = ConversationHandler(
 
         GET_TITLE: [MessageHandler(Filters.text, get_title)],
 
-        GET_URL: [MessageHandler(Filters.regex(r'^(https?://(www.)?digikala.com/product/dkp-\d+/)(.*)?$'), get_url)],
+        GET_URL: [MessageHandler(Filters.regex(r'^(https?://(www.)?digikala.com/product/dkp-\d+/?)(.*)?$'), get_url)],
 
         GET_TIME_LIMIT: [MessageHandler(Filters.regex(r'^[0-9]+$'), get_time_limit)],
 
