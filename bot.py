@@ -53,7 +53,7 @@ def check_list(context: CallbackContext):
     for item in CheckList.select().where(CheckList.is_active == True):
         user = User.select().where(User.id == item.user)[0]
         if item.check_until > datetime.now() and item.check_until != 0:
-            CheckList.update(is_active=False).where(id == item.id).execute()
+            CheckList.update(is_active=False).where(CheckList.id == item.id).execute()
             context.bot.send_message(user.chat_id, '{title}\'s time finished!'.format(title=item.title))
             continue
         if is_available(item.url):
